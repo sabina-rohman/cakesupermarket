@@ -1,0 +1,28 @@
+<% include ../partials/header %>
+
+<div class="row">
+	<div class="col-md-4">
+		<div class="card" style="width: 18rem;">
+		  <img class="card-img-top" src="<%= user.avatar %>" alt="user profile image">
+		  <div class="card-body">
+			<h1 class="card-title">
+			<%= user.firstName + " " + user.lastName %>
+			</h1>
+			<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+			<a href="mailto:<%= user.email %>"><%= user.email %></a>
+		  </div>
+		</div>
+	</div>
+	<div class="col-md-8">
+		<h3>
+			<%= user.username %>'s bakeries 
+		</h3>
+		<ul>
+		<% bakers.forEach(function(baker) { %>
+			<li><a href="/bakers/<%= baker.id %>"><%= baker.name %></a></li>
+		<% }); %>
+		</ul>
+	</div>
+</div>
+
+<% include ../partials/footer %>

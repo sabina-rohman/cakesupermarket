@@ -1,0 +1,42 @@
+<% include ../partials/header %>
+
+<div  class="container">
+	<div class="jumbotron">
+		<div class="container">
+		  <h1>
+			View Bakeries around the World!
+		  </h1>
+			<p>
+				<a class="btn btn-primary" href="/bakers/new">Add Your Bakery!</a>
+			</p>
+			<p>
+			    <form action="/bakers" method="GET" class="form-inline">
+					<div class="form-group mb-2">
+					      <input type="text" name="search" placeholder="Bakery search..." class="form-control">
+						   <input type="submit" value="Search" class="btn btn-secondary ml-2">
+					</div>	
+				</form>
+				</p>
+			<p>
+				<a href="/">Go back to landing page!</a>
+			</p>
+		</div>
+	</div>
+	
+	<div class="row text-center" id="campground-grid">
+		<% bakers.forEach(function(baker){ %>
+			<div class="col-lg-3 col-md-4 col-sm-6 mb-4"> 
+				<div class="card">
+				  <img src="<%= baker.image %>" class="card-img-top" alt="<%= baker.name %>">
+				  <div class="card-body">
+					<h5 class="card-title"><%= baker.name %></h5>
+					<a href="/bakers/<%= baker._id %>" class="btn btn-primary">More Info</a>
+				  </div>
+				</div>
+
+			</div>
+		<% }); %>
+	</div>
+</div>
+
+<% include ../partials/footer %>
