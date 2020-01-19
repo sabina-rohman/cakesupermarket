@@ -72,4 +72,33 @@
   </div>
 </div>
 
+<script>
+  function initMap() {
+    var lat = <%= baker.lat %>;
+    var lng = <%= baker.lng %>;
+    var center = {lat: lat, lng: lng };
+    var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 8,
+        center: center,
+        scrollwheel: false
+    });
+    var contentString = `
+      <strong><%= baker.name %><br />
+      <%= baker.location %></strong>
+      <p><%= baker.description %></p>
+    `
+    var infowindow = new google.maps.InfoWindow({
+      content: contentString
+    });
+    var marker = new google.maps.Marker({
+        position: center,
+        map: map
+    });
+    marker.addListener('click', function() {
+      infowindow.open(map, marker);
+    });
+  }
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAqQHPFzlRKJ_uppzkX8MbkwIFQPtaiZp4&callback=initMap"></script>
+
 <% include ../partials/footer %>

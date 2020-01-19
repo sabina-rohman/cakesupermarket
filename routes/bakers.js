@@ -2,6 +2,16 @@ var express = require("express");
 var router = express.Router();
 var Baker = require("../models/baker");
 var middleware = require("../middleware");
+var NodeGeocoder = require('node-geocoder');
+
+var options = {
+  provider: 'google',
+  httpAdapter: 'https',
+  apiKey: process.env.GEOCODER_API_KEY,
+  formatter: null
+};
+ 
+var geocoder = NodeGeocoder(options);
 
 // =============
 // BAKER ROUTE
@@ -50,7 +60,17 @@ router.post("/", middleware.isLoggedIn, function(req, res){
 		id: req.user._id,
 		username: req.user.username
 	};
-	var newBakers = {name: name, image: image, description: description, author: author};
+	geocoder.geocode(req.body.location, function (err, data) {
+    if (err || !data.length) {
+	  console.log(err);
+      req.flash('error', 'Invalid address');
+      return res.redirect('back');
+	}
+    
+    var lat = data[0].latitude;
+    var lng = data[0].longitude;
+    var location = data[0].formattedAddress;
+	var newBakers = {name: name, image: image, description: description, author: author,  location: location, lat: lat, lng: lng};
 	console.log("newBakers::");
 	console.log(newBakers);
 // 	Create a new bakery and save to DB
@@ -62,8 +82,8 @@ router.post("/", middleware.isLoggedIn, function(req, res){
 			res.redirect("/bakers");
 		}
 	});
+  });
 });
-
 // SHOW ROUTE
 router.get("/:id", function(req, res){
 // 	FIND THE BAKERY WITH PROVIDED ID
